@@ -1,0 +1,75 @@
+{
+  "today": "2026-10-26",
+  "cases": [
+    {
+      "name": "strong saas match",
+      "candidate": "Senior software engineer with 7 years of experience building SaaS platform products on AWS. BSc in Computer Science.\n- Led migration of 40 microservices to Kubernetes and Docker, cutting cloud cost 30%\n- Built TypeScript and React dashboards used by 12k customers\n- Owned CI/CD pipelines in GitHub Actions; deploys went from weekly to daily\nLanguages: English, Finnish",
+      "job": "We are a B2B SaaS platform company. You have 5+ years of experience with TypeScript, React, AWS, Docker and Kubernetes, and own CI/CD. Bachelor's degree in CS or similar. Our cloud infrastructure runs on microservices.",
+      "languages": null,
+      "work_authorized": null
+    },
+    {
+      "name": "domain mismatch",
+      "candidate": "Project manager with 9 years of experience in heavy machinery manufacturing and industrial supply chain. PMP certified, Agile and Jira.\n- Delivered 14 factory automation projects on budget\n- Managed procurement for a 200-person plant",
+      "job": "Crypto trading desk seeks a project manager. Experience with forex, brokerage, blockchain and payments required. Agile, Jira, stakeholder management.",
+      "languages": ["English"],
+      "work_authorized": null
+    },
+    {
+      "name": "missing required language",
+      "candidate": "Data analyst, 4 years of experience with SQL, Python, Power BI and Tableau in e-commerce retail.",
+      "job": "E-commerce retail company in Berlin. Fluent German required. 3-5 years of experience with SQL, Python and Tableau.",
+      "languages": ["English", "Urdu"],
+      "work_authorized": null
+    },
+    {
+      "name": "closed posting",
+      "candidate": "Backend engineer, 6 years of experience, Python, PostgreSQL, Docker, AWS.",
+      "job": "Backend engineer (Python, PostgreSQL, Docker, AWS). This position has been filled. No longer accepting applications.",
+      "languages": null,
+      "work_authorized": null
+    },
+    {
+      "name": "deadline passed",
+      "candidate": "Designer with 5 years of experience in Figma for SaaS products.",
+      "job": "Product designer for our SaaS platform. Figma expert. Application deadline: 2026-09-30",
+      "languages": null,
+      "work_authorized": null
+    },
+    {
+      "name": "deadline in future",
+      "candidate": "Designer with 5 years of experience in Figma for SaaS products.",
+      "job": "Product designer for our SaaS platform. Figma expert. Apply by 15 December 2026.",
+      "languages": null,
+      "work_authorized": null
+    },
+    {
+      "name": "clearance needs verification",
+      "candidate": "Cloud engineer, 8 years of experience with AWS, Terraform, Kubernetes. MSc in Computer Science.",
+      "job": "Cloud engineer for defense infrastructure. Active security clearance. AWS, Terraform, Kubernetes, 5 years of experience.",
+      "languages": null,
+      "work_authorized": null
+    },
+    {
+      "name": "clearance confirmed",
+      "candidate": "Cloud engineer, 8 years of experience with AWS, Terraform, Kubernetes. MSc in Computer Science.",
+      "job": "Cloud engineer for defense infrastructure. Active security clearance. AWS, Terraform, Kubernetes, 5 years of experience.",
+      "languages": null,
+      "work_authorized": true
+    },
+    {
+      "name": "phd gate and short experience",
+      "candidate": "Machine learning engineer, 2 years of experience, Python. Master's degree in statistics. Clinical healthcare data.",
+      "job": "Research scientist in clinical diagnostics. PhD required. 6+ years of experience in machine learning with Python.",
+      "languages": null,
+      "work_authorized": null
+    },
+    {
+      "name": "horizontal job, no years stated by candidate",
+      "candidate": "Operations generalist. Comfortable with Excel, Notion and HubSpot. Scrum master on two teams.",
+      "job": "Operations associate. You will run weekly planning and keep the CRM (HubSpot) tidy.",
+      "languages": null,
+      "work_authorized": null
+    }
+  ]
+}

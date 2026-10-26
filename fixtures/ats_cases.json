@@ -1,0 +1,566 @@
+{
+  "today": "2026-10-26",
+  "cases": [
+    {
+      "name": "strong saas match",
+      "candidate": "Senior software engineer with 7 years of experience building SaaS platform products on AWS. BSc in Computer Science.\n- Led migration of 40 microservices to Kubernetes and Docker, cutting cloud cost 30%\n- Built TypeScript and React dashboards used by 12k customers\n- Owned CI/CD pipelines in GitHub Actions; deploys went from weekly to daily\nLanguages: English, Finnish",
+      "job": "We are a B2B SaaS platform company. You have 5+ years of experience with TypeScript, React, AWS, Docker and Kubernetes, and own CI/CD. Bachelor's degree in CS or similar. Our cloud infrastructure runs on microservices.",
+      "languages": null,
+      "work_authorized": null,
+      "expected": {
+        "total_fit_score": 100,
+        "verdict": "STRONG_MATCH",
+        "listing": {
+          "status": "ACTIVE",
+          "is_active": true,
+          "reason": "No closure notice or past deadline found.",
+          "deadline": null
+        },
+        "tiers": {
+          "domain": {
+            "score": 40.0,
+            "max": 40,
+            "affinity": 1.0,
+            "candidate_domains": [
+              "Software & SaaS"
+            ],
+            "job_domains": [
+              "Software & SaaS"
+            ]
+          },
+          "qualifications": {
+            "score": 20.0,
+            "max": 20,
+            "required_years": 5,
+            "candidate_years": 7,
+            "required_degree": 1,
+            "candidate_degree": 1,
+            "degree_ok": true
+          },
+          "skills": {
+            "score": 30.0,
+            "max": 30,
+            "matched": [
+              "typescript",
+              "react",
+              "aws",
+              "docker",
+              "kubernetes",
+              "ci/cd"
+            ],
+            "missing": []
+          },
+          "logistics": {
+            "score": 10.0,
+            "max": 10,
+            "required_languages": [],
+            "missing_languages": [],
+            "clearance_phrase": null
+          }
+        }
+      }
+    },
+    {
+      "name": "domain mismatch",
+      "candidate": "Project manager with 9 years of experience in heavy machinery manufacturing and industrial supply chain. PMP certified, Agile and Jira.\n- Delivered 14 factory automation projects on budget\n- Managed procurement for a 200-person plant",
+      "job": "Crypto trading desk seeks a project manager. Experience with forex, brokerage, blockchain and payments required. Agile, Jira, stakeholder management.",
+      "languages": [
+        "English"
+      ],
+      "work_authorized": null,
+      "expected": {
+        "total_fit_score": 50,
+        "verdict": "POOR_DOMAIN_FIT",
+        "listing": {
+          "status": "ACTIVE",
+          "is_active": true,
+          "reason": "No closure notice or past deadline found.",
+          "deadline": null
+        },
+        "tiers": {
+          "domain": {
+            "score": 0.0,
+            "max": 40,
+            "affinity": 0.0,
+            "candidate_domains": [
+              "Industrial & Manufacturing"
+            ],
+            "job_domains": [
+              "Fintech & Financial Services"
+            ]
+          },
+          "qualifications": {
+            "score": 20.0,
+            "max": 20,
+            "required_years": null,
+            "candidate_years": 9,
+            "required_degree": 0,
+            "candidate_degree": 0,
+            "degree_ok": true
+          },
+          "skills": {
+            "score": 20.0,
+            "max": 30,
+            "matched": [
+              "agile",
+              "jira"
+            ],
+            "missing": [
+              "stakeholder management"
+            ]
+          },
+          "logistics": {
+            "score": 10.0,
+            "max": 10,
+            "required_languages": [],
+            "missing_languages": [],
+            "clearance_phrase": null
+          }
+        }
+      }
+    },
+    {
+      "name": "missing required language",
+      "candidate": "Data analyst, 4 years of experience with SQL, Python, Power BI and Tableau in e-commerce retail.",
+      "job": "E-commerce retail company in Berlin. Fluent German required. 3-5 years of experience with SQL, Python and Tableau.",
+      "languages": [
+        "English",
+        "Urdu"
+      ],
+      "work_authorized": null,
+      "expected": {
+        "total_fit_score": 77,
+        "verdict": "LANGUAGE_GATE_FAILED",
+        "listing": {
+          "status": "ACTIVE",
+          "is_active": true,
+          "reason": "No closure notice or past deadline found.",
+          "deadline": null
+        },
+        "tiers": {
+          "domain": {
+            "score": 26.7,
+            "max": 40,
+            "affinity": 0.667,
+            "candidate_domains": [
+              "E-Commerce & Retail"
+            ],
+            "job_domains": [
+              "E-Commerce & Retail"
+            ]
+          },
+          "qualifications": {
+            "score": 20.0,
+            "max": 20,
+            "required_years": 3,
+            "candidate_years": 4,
+            "required_degree": 0,
+            "candidate_degree": 0,
+            "degree_ok": true
+          },
+          "skills": {
+            "score": 30.0,
+            "max": 30,
+            "matched": [
+              "python",
+              "sql",
+              "tableau"
+            ],
+            "missing": []
+          },
+          "logistics": {
+            "score": 0.0,
+            "max": 10,
+            "required_languages": [
+              "german"
+            ],
+            "missing_languages": [
+              "german"
+            ],
+            "clearance_phrase": null
+          }
+        }
+      }
+    },
+    {
+      "name": "closed posting",
+      "candidate": "Backend engineer, 6 years of experience, Python, PostgreSQL, Docker, AWS.",
+      "job": "Backend engineer (Python, PostgreSQL, Docker, AWS). This position has been filled. No longer accepting applications.",
+      "languages": null,
+      "work_authorized": null,
+      "expected": {
+        "total_fit_score": 20,
+        "verdict": "CLOSED",
+        "listing": {
+          "status": "EXPIRED",
+          "is_active": false,
+          "reason": "The posting says it is closed.",
+          "deadline": null
+        },
+        "tiers": {
+          "domain": {
+            "score": 34.0,
+            "max": 40,
+            "affinity": 0.85,
+            "candidate_domains": [],
+            "job_domains": []
+          },
+          "qualifications": {
+            "score": 20.0,
+            "max": 20,
+            "required_years": null,
+            "candidate_years": 6,
+            "required_degree": 0,
+            "candidate_degree": 0,
+            "degree_ok": true
+          },
+          "skills": {
+            "score": 30.0,
+            "max": 30,
+            "matched": [
+              "python",
+              "postgresql",
+              "aws",
+              "docker"
+            ],
+            "missing": []
+          },
+          "logistics": {
+            "score": 10.0,
+            "max": 10,
+            "required_languages": [],
+            "missing_languages": [],
+            "clearance_phrase": null
+          }
+        }
+      }
+    },
+    {
+      "name": "deadline passed",
+      "candidate": "Designer with 5 years of experience in Figma for SaaS products.",
+      "job": "Product designer for our SaaS platform. Figma expert. Application deadline: 2026-09-30",
+      "languages": null,
+      "work_authorized": null,
+      "expected": {
+        "total_fit_score": 20,
+        "verdict": "CLOSED",
+        "listing": {
+          "status": "EXPIRED",
+          "is_active": false,
+          "reason": "The application deadline (2026-09-30) has passed.",
+          "deadline": "2026-09-30"
+        },
+        "tiers": {
+          "domain": {
+            "score": 13.3,
+            "max": 40,
+            "affinity": 0.333,
+            "candidate_domains": [
+              "Software & SaaS"
+            ],
+            "job_domains": [
+              "Software & SaaS"
+            ]
+          },
+          "qualifications": {
+            "score": 20.0,
+            "max": 20,
+            "required_years": null,
+            "candidate_years": 5,
+            "required_degree": 0,
+            "candidate_degree": 0,
+            "degree_ok": true
+          },
+          "skills": {
+            "score": 30.0,
+            "max": 30,
+            "matched": [
+              "figma"
+            ],
+            "missing": []
+          },
+          "logistics": {
+            "score": 10.0,
+            "max": 10,
+            "required_languages": [],
+            "missing_languages": [],
+            "clearance_phrase": null
+          }
+        }
+      }
+    },
+    {
+      "name": "deadline in future",
+      "candidate": "Designer with 5 years of experience in Figma for SaaS products.",
+      "job": "Product designer for our SaaS platform. Figma expert. Apply by 15 December 2026.",
+      "languages": null,
+      "work_authorized": null,
+      "expected": {
+        "total_fit_score": 73,
+        "verdict": "MODERATE_MATCH",
+        "listing": {
+          "status": "ACTIVE",
+          "is_active": true,
+          "reason": "Open until 2026-12-15.",
+          "deadline": "2026-12-15"
+        },
+        "tiers": {
+          "domain": {
+            "score": 13.3,
+            "max": 40,
+            "affinity": 0.333,
+            "candidate_domains": [
+              "Software & SaaS"
+            ],
+            "job_domains": [
+              "Software & SaaS"
+            ]
+          },
+          "qualifications": {
+            "score": 20.0,
+            "max": 20,
+            "required_years": null,
+            "candidate_years": 5,
+            "required_degree": 0,
+            "candidate_degree": 0,
+            "degree_ok": true
+          },
+          "skills": {
+            "score": 30.0,
+            "max": 30,
+            "matched": [
+              "figma"
+            ],
+            "missing": []
+          },
+          "logistics": {
+            "score": 10.0,
+            "max": 10,
+            "required_languages": [],
+            "missing_languages": [],
+            "clearance_phrase": null
+          }
+        }
+      }
+    },
+    {
+      "name": "clearance needs verification",
+      "candidate": "Cloud engineer, 8 years of experience with AWS, Terraform, Kubernetes. MSc in Computer Science.",
+      "job": "Cloud engineer for defense infrastructure. Active security clearance. AWS, Terraform, Kubernetes, 5 years of experience.",
+      "languages": null,
+      "work_authorized": null,
+      "expected": {
+        "total_fit_score": 69,
+        "verdict": "VERIFY_ELIGIBILITY",
+        "listing": {
+          "status": "ACTIVE",
+          "is_active": true,
+          "reason": "No closure notice or past deadline found.",
+          "deadline": null
+        },
+        "tiers": {
+          "domain": {
+            "score": 13.3,
+            "max": 40,
+            "affinity": 0.333,
+            "candidate_domains": [
+              "Software & SaaS"
+            ],
+            "job_domains": [
+              "Software & SaaS"
+            ]
+          },
+          "qualifications": {
+            "score": 20.0,
+            "max": 20,
+            "required_years": 5,
+            "candidate_years": 8,
+            "required_degree": 0,
+            "candidate_degree": 2,
+            "degree_ok": true
+          },
+          "skills": {
+            "score": 30.0,
+            "max": 30,
+            "matched": [
+              "aws",
+              "kubernetes",
+              "terraform"
+            ],
+            "missing": []
+          },
+          "logistics": {
+            "score": 6.0,
+            "max": 10,
+            "required_languages": [],
+            "missing_languages": [],
+            "clearance_phrase": "security clearance"
+          }
+        }
+      }
+    },
+    {
+      "name": "clearance confirmed",
+      "candidate": "Cloud engineer, 8 years of experience with AWS, Terraform, Kubernetes. MSc in Computer Science.",
+      "job": "Cloud engineer for defense infrastructure. Active security clearance. AWS, Terraform, Kubernetes, 5 years of experience.",
+      "languages": null,
+      "work_authorized": true,
+      "expected": {
+        "total_fit_score": 73,
+        "verdict": "MODERATE_MATCH",
+        "listing": {
+          "status": "ACTIVE",
+          "is_active": true,
+          "reason": "No closure notice or past deadline found.",
+          "deadline": null
+        },
+        "tiers": {
+          "domain": {
+            "score": 13.3,
+            "max": 40,
+            "affinity": 0.333,
+            "candidate_domains": [
+              "Software & SaaS"
+            ],
+            "job_domains": [
+              "Software & SaaS"
+            ]
+          },
+          "qualifications": {
+            "score": 20.0,
+            "max": 20,
+            "required_years": 5,
+            "candidate_years": 8,
+            "required_degree": 0,
+            "candidate_degree": 2,
+            "degree_ok": true
+          },
+          "skills": {
+            "score": 30.0,
+            "max": 30,
+            "matched": [
+              "aws",
+              "kubernetes",
+              "terraform"
+            ],
+            "missing": []
+          },
+          "logistics": {
+            "score": 10.0,
+            "max": 10,
+            "required_languages": [],
+            "missing_languages": [],
+            "clearance_phrase": "security clearance"
+          }
+        }
+      }
+    },
+    {
+      "name": "phd gate and short experience",
+      "candidate": "Machine learning engineer, 2 years of experience, Python. Master's degree in statistics. Clinical healthcare data.",
+      "job": "Research scientist in clinical diagnostics. PhD required. 6+ years of experience in machine learning with Python.",
+      "languages": null,
+      "work_authorized": null,
+      "expected": {
+        "total_fit_score": 74,
+        "verdict": "MODERATE_MATCH",
+        "listing": {
+          "status": "ACTIVE",
+          "is_active": true,
+          "reason": "No closure notice or past deadline found.",
+          "deadline": null
+        },
+        "tiers": {
+          "domain": {
+            "score": 26.7,
+            "max": 40,
+            "affinity": 0.667,
+            "candidate_domains": [
+              "Healthcare & Life Sciences"
+            ],
+            "job_domains": [
+              "Healthcare & Life Sciences"
+            ]
+          },
+          "qualifications": {
+            "score": 7.3,
+            "max": 20,
+            "required_years": 6,
+            "candidate_years": 2,
+            "required_degree": 3,
+            "candidate_degree": 2,
+            "degree_ok": false
+          },
+          "skills": {
+            "score": 30.0,
+            "max": 30,
+            "matched": [
+              "python",
+              "machine learning"
+            ],
+            "missing": []
+          },
+          "logistics": {
+            "score": 10.0,
+            "max": 10,
+            "required_languages": [],
+            "missing_languages": [],
+            "clearance_phrase": null
+          }
+        }
+      }
+    },
+    {
+      "name": "horizontal job, no years stated by candidate",
+      "candidate": "Operations generalist. Comfortable with Excel, Notion and HubSpot. Scrum master on two teams.",
+      "job": "Operations associate. You will run weekly planning and keep the CRM (HubSpot) tidy.",
+      "languages": null,
+      "work_authorized": null,
+      "expected": {
+        "total_fit_score": 79,
+        "verdict": "MODERATE_MATCH",
+        "listing": {
+          "status": "ACTIVE",
+          "is_active": true,
+          "reason": "No closure notice or past deadline found.",
+          "deadline": null
+        },
+        "tiers": {
+          "domain": {
+            "score": 34.0,
+            "max": 40,
+            "affinity": 0.85,
+            "candidate_domains": [],
+            "job_domains": []
+          },
+          "qualifications": {
+            "score": 20.0,
+            "max": 20,
+            "required_years": null,
+            "candidate_years": null,
+            "required_degree": 0,
+            "candidate_degree": 0,
+            "degree_ok": true
+          },
+          "skills": {
+            "score": 15.0,
+            "max": 30,
+            "matched": [
+              "hubspot"
+            ],
+            "missing": [
+              "crm"
+            ]
+          },
+          "logistics": {
+            "score": 10.0,
+            "max": 10,
+            "required_languages": [],
+            "missing_languages": [],
+            "clearance_phrase": null
+          }
+        }
+      }
+    }
+  ]
+}
