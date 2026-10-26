@@ -1,6 +1,6 @@
 # JobsDirect MCP
 
-**Live demo:** https://jobs-direct-mcp.vercel.app (mock mode, runs fully in the browser)
+**Live demo:** https://jobs-direct-mcp.vercel.app (mock mode, runs fully in the browser) · deploys automatically on every push to `main`
 
 An MCP server that lets Claude Desktop, Cursor or any MCP client search six job portals, score how well
 you fit each posting, and prepare the application: a tailored resume, a cover letter, a Word file and a
