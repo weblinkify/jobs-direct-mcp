@@ -93,7 +93,9 @@ export default function App() {
           <p className="px-1 text-xs text-slate-500" aria-live="polite">
             {busy ? 'Searching…' : `${jobs.length} posting${jobs.length === 1 ? '' : 's'} · badge = your fit score`}
           </p>
-          <JobList jobs={jobs} selectedId={selected?.id ?? null} fits={fits} onSelect={(j) => setSelected(j)} />
+          <div className="lg:max-h-[calc(100vh-380px)] lg:min-h-[320px] lg:overflow-y-auto lg:pr-1">
+            <JobList jobs={jobs} selectedId={selected?.id ?? null} fits={fits} onSelect={(j) => setSelected(j)} />
+          </div>
         </aside>
 
         <div className="min-w-0 space-y-4">
@@ -150,7 +152,7 @@ export default function App() {
 
           <div className="grid gap-4 xl:grid-cols-[1fr_360px]">
             <TrackerPanel apps={apps} onStatus={setStatus} onRemove={remove} />
-            <SalaryCard defaultRole={selected?.title ?? 'Software engineer'} />
+            <SalaryCard key={selected?.id ?? 'none'} defaultRole={selected?.title ?? 'Software engineer'} />
           </div>
         </div>
       </main>
