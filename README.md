@@ -108,10 +108,10 @@ rest (Vite build, SPA rewrite, cache and security headers). No environment varia
 ## Development
 
 ```bash
-pip install -r requirements-dev.txt
-pytest -q                        # Python: engine, portals (mocked HTTP), writer, tracker, MCP wiring
+make install   # dependencies and git hooks
+make check     # lint, types, tests and build: everything CI runs before merge
+make audit     # pip-audit and npm audit
 python fixtures/generate.py      # after changing jobsdirect/ats.py
-cd frontend && npm test && npm run build
 ```
 
 ## Notes
