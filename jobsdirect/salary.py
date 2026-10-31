@@ -5,7 +5,7 @@ These are rough planning numbers compiled from public salary surveys, not live m
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Any
 
 # role -> market -> (junior, mid, senior) as (low, high) in thousands of the market currency
 BANDS: dict[str, dict[str, tuple[tuple[int, int], tuple[int, int], tuple[int, int]]]] = {
@@ -56,23 +56,53 @@ BANDS: dict[str, dict[str, tuple[tuple[int, int], tuple[int, int], tuple[int, in
 CURRENCY = {"US": "USD", "EU": "EUR", "UK": "GBP", "TR": "TRY", "REMOTE": "USD"}
 
 _ROLE_ALIASES = {
-    "developer": "software engineer", "engineer": "software engineer", "frontend": "software engineer",
-    "backend": "software engineer", "full stack": "software engineer", "fullstack": "software engineer",
-    "data analyst": "data scientist", "machine learning": "data scientist", "ml engineer": "data scientist",
-    "product owner": "product manager", "program manager": "project manager", "scrum master": "project manager",
-    "operations": "operations manager", "ux": "designer", "ui": "designer",
+    "developer": "software engineer",
+    "engineer": "software engineer",
+    "frontend": "software engineer",
+    "backend": "software engineer",
+    "full stack": "software engineer",
+    "fullstack": "software engineer",
+    "data analyst": "data scientist",
+    "machine learning": "data scientist",
+    "ml engineer": "data scientist",
+    "product owner": "product manager",
+    "program manager": "project manager",
+    "scrum master": "project manager",
+    "operations": "operations manager",
+    "ux": "designer",
+    "ui": "designer",
 }
 _MARKET_ALIASES = {
-    "usa": "US", "united states": "US", "us": "US", "america": "US",
-    "uk": "UK", "united kingdom": "UK", "london": "UK", "england": "UK",
-    "turkey": "TR", "türkiye": "TR", "turkiye": "TR", "istanbul": "TR", "tr": "TR",
-    "remote": "REMOTE", "global": "REMOTE",
-    "europe": "EU", "eu": "EU", "germany": "EU", "finland": "EU", "netherlands": "EU", "france": "EU",
-    "spain": "EU", "sweden": "EU", "berlin": "EU", "helsinki": "EU", "amsterdam": "EU",
+    "usa": "US",
+    "united states": "US",
+    "us": "US",
+    "america": "US",
+    "uk": "UK",
+    "united kingdom": "UK",
+    "london": "UK",
+    "england": "UK",
+    "turkey": "TR",
+    "türkiye": "TR",
+    "turkiye": "TR",
+    "istanbul": "TR",
+    "tr": "TR",
+    "remote": "REMOTE",
+    "global": "REMOTE",
+    "europe": "EU",
+    "eu": "EU",
+    "germany": "EU",
+    "finland": "EU",
+    "netherlands": "EU",
+    "france": "EU",
+    "spain": "EU",
+    "sweden": "EU",
+    "berlin": "EU",
+    "helsinki": "EU",
+    "amsterdam": "EU",
 }
 
 
-def match_role(role: str) -> Optional[str]:
+def match_role(role: str) -> str | None:
     lower = role.lower()
     for key in BANDS:
         if key in lower:
@@ -83,7 +113,7 @@ def match_role(role: str) -> Optional[str]:
     return None
 
 
-def match_market(location: Optional[str]) -> str:
+def match_market(location: str | None) -> str:
     if not location:
         return "REMOTE"
     lower = location.lower().strip()
@@ -95,17 +125,26 @@ def match_market(location: Optional[str]) -> str:
     return "REMOTE"
 
 
-def benchmark(role: str, location: Optional[str] = None) -> dict:
+def benchmark(role: str, location: str | None = None) -> dict[str, Any]:
     key = match_role(role)
     market = match_market(location)
     if key is None:
-        return {"role": role, "matched_role": None,
-                "message": f"No band for '{role}'. Known roles: {', '.join(BANDS)}."}
+        return {
+            "role": role,
+            "matched_role": None,
+            "message": f"No band for '{role}'. Known roles: {', '.join(BANDS)}.",
+        }
     junior, mid, senior = BANDS[key][market]
     unit = CURRENCY[market]
-    fmt = lambda band: f"{band[0]:,}k-{band[1]:,}k {unit}"  # noqa: E731
+
+    def fmt(band: tuple[int, int]) -> str:
+        return f"{band[0]:,}k-{band[1]:,}k {unit}"
+
     return {
-        "role": role, "matched_role": key, "market": market, "currency": unit,
+        "role": role,
+        "matched_role": key,
+        "market": market,
+        "currency": unit,
         "annual_gross": {"junior": fmt(junior), "mid": fmt(mid), "senior": fmt(senior)},
         "note": "Indicative planning bands, not live market data. Anchor on the upper half of your level.",
     }

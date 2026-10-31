@@ -10,66 +10,210 @@ import math
 import re
 from dataclasses import dataclass
 from datetime import date, datetime
-from typing import Optional
+from typing import Any
 
 INDUSTRY_TAXONOMY: dict[str, list[str]] = {
     "Fintech & Financial Services": [
-        "fintech", "banking", "payments", "card payments", "merchant", "checkout", "forex",
-        "brokerage", "trading", "crypto", "blockchain", "web3", "lending", "credit",
-        "securities", "wealthtech", "insurance", "insurtech",
+        "fintech",
+        "banking",
+        "payments",
+        "card payments",
+        "merchant",
+        "checkout",
+        "forex",
+        "brokerage",
+        "trading",
+        "crypto",
+        "blockchain",
+        "web3",
+        "lending",
+        "credit",
+        "securities",
+        "wealthtech",
+        "insurance",
+        "insurtech",
     ],
     "Industrial & Manufacturing": [
-        "manufacturing", "industrial", "heavy machinery", "machinery", "automotive", "aerospace",
-        "factory", "plant", "supply chain", "logistics", "freight", "warehouse", "procurement",
-        "mechanical", "sensors", "automation hardware",
+        "manufacturing",
+        "industrial",
+        "heavy machinery",
+        "machinery",
+        "automotive",
+        "aerospace",
+        "factory",
+        "plant",
+        "supply chain",
+        "logistics",
+        "freight",
+        "warehouse",
+        "procurement",
+        "mechanical",
+        "sensors",
+        "automation hardware",
     ],
     "Healthcare & Life Sciences": [
-        "healthcare", "hospital", "clinical", "pharma", "pharmaceutical", "biotech",
-        "medical device", "life sciences", "diagnostics", "genomics", "healthtech", "patient",
+        "healthcare",
+        "hospital",
+        "clinical",
+        "pharma",
+        "pharmaceutical",
+        "biotech",
+        "medical device",
+        "life sciences",
+        "diagnostics",
+        "genomics",
+        "healthtech",
+        "patient",
     ],
     "E-Commerce & Retail": [
-        "ecommerce", "e-commerce", "retail", "shopify", "d2c", "marketplace", "consumer goods",
-        "fmcg", "omnichannel", "merchandising",
+        "ecommerce",
+        "e-commerce",
+        "retail",
+        "shopify",
+        "d2c",
+        "marketplace",
+        "consumer goods",
+        "fmcg",
+        "omnichannel",
+        "merchandising",
     ],
     "Software & SaaS": [
-        "saas", "enterprise software", "cloud", "devops", "cybersecurity", "infrastructure",
-        "data engineering", "developer tools", "b2b software", "platform", "microservices",
-        "api", "apis",
+        "saas",
+        "enterprise software",
+        "cloud",
+        "devops",
+        "cybersecurity",
+        "infrastructure",
+        "data engineering",
+        "developer tools",
+        "b2b software",
+        "platform",
+        "microservices",
+        "api",
+        "apis",
     ],
     "Media & Gaming": [
-        "gaming", "game dev", "unity", "unreal", "streaming", "media", "entertainment",
-        "broadcasting", "animation",
+        "gaming",
+        "game dev",
+        "unity",
+        "unreal",
+        "streaming",
+        "media",
+        "entertainment",
+        "broadcasting",
+        "animation",
     ],
     "Energy & Cleantech": [
-        "energy", "oil & gas", "renewables", "solar", "wind", "power grid", "utilities",
-        "cleantech", "sustainability", "battery", "ev charging",
+        "energy",
+        "oil & gas",
+        "renewables",
+        "solar",
+        "wind",
+        "power grid",
+        "utilities",
+        "cleantech",
+        "sustainability",
+        "battery",
+        "ev charging",
     ],
     "Education & EdTech": [
-        "education", "edtech", "e-learning", "university", "curriculum", "academic",
+        "education",
+        "edtech",
+        "e-learning",
+        "university",
+        "curriculum",
+        "academic",
     ],
     "Telecom & Networking": [
-        "telecom", "telecommunications", "networking", "5g", "wireless", "broadband", "isp",
+        "telecom",
+        "telecommunications",
+        "networking",
+        "5g",
+        "wireless",
+        "broadband",
+        "isp",
     ],
 }
 
 SKILL_LEXICON: list[str] = [
-    "agile", "scrum", "kanban", "jira", "confluence", "project management", "pmp",
-    "stakeholder management", "roadmap", "kpi", "okr", "budget", "p&l", "cross-functional",
-    "vendor management", "python", "javascript", "typescript", "react", "node.js", "java",
-    "golang", "sql", "postgresql", "aws", "gcp", "azure", "docker", "kubernetes", "terraform",
-    "git", "ci/cd", "rest api", "graphql", "machine learning", "data analytics", "power bi",
-    "tableau", "crm", "erp", "salesforce", "hubspot", "b2b sales", "figma",
+    "agile",
+    "scrum",
+    "kanban",
+    "jira",
+    "confluence",
+    "project management",
+    "pmp",
+    "stakeholder management",
+    "roadmap",
+    "kpi",
+    "okr",
+    "budget",
+    "p&l",
+    "cross-functional",
+    "vendor management",
+    "python",
+    "javascript",
+    "typescript",
+    "react",
+    "node.js",
+    "java",
+    "golang",
+    "sql",
+    "postgresql",
+    "aws",
+    "gcp",
+    "azure",
+    "docker",
+    "kubernetes",
+    "terraform",
+    "git",
+    "ci/cd",
+    "rest api",
+    "graphql",
+    "machine learning",
+    "data analytics",
+    "power bi",
+    "tableau",
+    "crm",
+    "erp",
+    "salesforce",
+    "hubspot",
+    "b2b sales",
+    "figma",
 ]
 
 LANGUAGES: list[str] = [
-    "english", "turkish", "german", "french", "spanish", "italian", "dutch", "swedish",
-    "finnish", "danish", "norwegian", "polish", "portuguese", "russian", "arabic",
-    "mandarin", "chinese", "japanese", "korean", "hindi", "urdu",
+    "english",
+    "turkish",
+    "german",
+    "french",
+    "spanish",
+    "italian",
+    "dutch",
+    "swedish",
+    "finnish",
+    "danish",
+    "norwegian",
+    "polish",
+    "portuguese",
+    "russian",
+    "arabic",
+    "mandarin",
+    "chinese",
+    "japanese",
+    "korean",
+    "hindi",
+    "urdu",
 ]
 
 CLEARANCE_PHRASES: list[str] = [
-    "security clearance", "top secret", "must be a citizen", "citizenship required",
-    "must hold citizenship", "no visa sponsorship", "eligible to work in the us without sponsorship",
+    "security clearance",
+    "top secret",
+    "must be a citizen",
+    "citizenship required",
+    "must hold citizenship",
+    "no visa sponsorship",
+    "eligible to work in the us without sponsorship",
 ]
 
 WEIGHTS = {"domain": 40, "qualifications": 20, "skills": 30, "logistics": 10}
@@ -77,7 +221,7 @@ WEIGHTS = {"domain": 40, "qualifications": 20, "skills": 30, "logistics": 10}
 
 def round_half_up(value: float, digits: int = 0) -> float:
     """Half-up rounding, identical to the TypeScript port (Python's built-in uses banker's rounding)."""
-    factor = 10 ** digits
+    factor: float = 10**digits
     return math.floor(value * factor + 0.5) / factor
 
 
@@ -122,7 +266,7 @@ _RANGE_RE = re.compile(r"(\d{1,2})\s*(?:-|–|to)\s*(\d{1,2})\s*\+?\s*(?:years?|
 _SINGLE_RE = re.compile(r"(\d{1,2})\s*\+?\s*(?:years?|yrs?)", re.I)
 
 
-def required_years(text: str) -> Optional[int]:
+def required_years(text: str) -> int | None:
     """Minimum years of experience a posting asks for. For a range like "3-5 years" the floor (3) counts."""
     found: list[int] = []
     spans: list[tuple[int, int]] = []
@@ -136,7 +280,7 @@ def required_years(text: str) -> Optional[int]:
     return max(found) if found else None
 
 
-def candidate_years(text: str) -> Optional[int]:
+def candidate_years(text: str) -> int | None:
     """Years of experience a candidate states. Ranges count by their upper bound."""
     found: list[int] = []
     spans: list[tuple[int, int]] = []
@@ -182,11 +326,15 @@ def required_languages(text: str) -> list[str]:
 # ---------------------------------------------------------------------------
 
 _CLOSED_PATTERNS: list[tuple[str, str]] = [
-    (r"no longer accepting applications|this job has expired|job is closed|position (?:has been )?filled"
-     r"|position closed|posting (?:has )?expired|listing has ended|this job is no longer available",
-     "The posting says it is closed."),
-    (r"ilan yay[ıi]ndan kald[ıi]r[ıi]lm[ıi][sş]|ba[sş]vuruya kapal[ıi]|ilan(?:[ıi]n)? s[üu]resi dolmu[sş]",
-     "The Turkish listing says it is closed (ilan kapanmış)."),
+    (
+        r"no longer accepting applications|this job has expired|job is closed|position (?:has been )?filled"
+        r"|position closed|posting (?:has )?expired|listing has ended|this job is no longer available",
+        "The posting says it is closed.",
+    ),
+    (
+        r"ilan yay[ıi]ndan kald[ıi]r[ıi]lm[ıi][sş]|ba[sş]vuruya kapal[ıi]|ilan(?:[ıi]n)? s[üu]resi dolmu[sş]",
+        "The Turkish listing says it is closed (ilan kapanmış).",
+    ),
 ]
 
 _DEADLINE_RE = re.compile(
@@ -195,11 +343,20 @@ _DEADLINE_RE = re.compile(
     r"(\d{4}-\d{2}-\d{2}|\d{1,2}[./]\d{1,2}[./]\d{4}|\d{1,2}\s+[A-Za-z]+\s+\d{4}|[A-Za-z]+\s+\d{1,2},?\s+\d{4})",
     re.I,
 )
-_DATE_FORMATS = ("%Y-%m-%d", "%d.%m.%Y", "%d/%m/%Y", "%d %B %Y", "%d %b %Y", "%B %d, %Y", "%B %d %Y",
-                 "%b %d, %Y", "%b %d %Y")
+_DATE_FORMATS = (
+    "%Y-%m-%d",
+    "%d.%m.%Y",
+    "%d/%m/%Y",
+    "%d %B %Y",
+    "%d %b %Y",
+    "%B %d, %Y",
+    "%B %d %Y",
+    "%b %d, %Y",
+    "%b %d %Y",
+)
 
 
-def parse_deadline(raw: str) -> Optional[date]:
+def parse_deadline(raw: str) -> date | None:
     raw = raw.strip().rstrip(".,")
     for fmt in _DATE_FORMATS:
         try:
@@ -213,18 +370,22 @@ def parse_deadline(raw: str) -> Optional[date]:
 class ListingStatus:
     is_active: bool
     reason: str
-    deadline: Optional[str] = None
+    deadline: str | None = None
 
     @property
     def status(self) -> str:
         return "ACTIVE" if self.is_active else "EXPIRED"
 
-    def to_dict(self) -> dict:
-        return {"status": self.status, "is_active": self.is_active, "reason": self.reason,
-                "deadline": self.deadline}
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "status": self.status,
+            "is_active": self.is_active,
+            "reason": self.reason,
+            "deadline": self.deadline,
+        }
 
 
-def listing_status(text: str, today: Optional[date] = None) -> ListingStatus:
+def listing_status(text: str, today: date | None = None) -> ListingStatus:
     today = today or date.today()
     lower = text.replace("İ", "i").lower()  # Python lowercases "İ" to "i" + combining dot
     for pattern, reason in _CLOSED_PATTERNS:
@@ -245,13 +406,14 @@ def listing_status(text: str, today: Optional[date] = None) -> ListingStatus:
 # 4-tier fit evaluation
 # ---------------------------------------------------------------------------
 
+
 def evaluate_fit(
     candidate_profile: str,
     job_description: str,
-    candidate_languages: Optional[list[str]] = None,
-    work_authorized: Optional[bool] = None,
-    today: Optional[date] = None,
-) -> dict:
+    candidate_languages: list[str] | None = None,
+    work_authorized: bool | None = None,
+    today: date | None = None,
+) -> dict[str, Any]:
     """Scores candidate-to-job fit 0-100 across four weighted tiers and returns a verdict.
 
     Tier 1  industry/domain affinity            40
@@ -280,7 +442,9 @@ def evaluate_fit(
     elif cand_yrs is None:
         years_points = 6.0
     else:
-        years_points = round_half_up(min(cand_yrs / req_years, 1.0) * 10.0, 1) if req_years > 0 else 10.0
+        years_points = (
+            round_half_up(min(cand_yrs / req_years, 1.0) * 10.0, 1) if req_years > 0 else 10.0
+        )
     qualification_score = round_half_up(degree_points + years_points, 1)
 
     # Tier 3
@@ -332,21 +496,32 @@ def evaluate_fit(
         "listing": status.to_dict(),
         "tiers": {
             "domain": {
-                "score": domain_score, "max": WEIGHTS["domain"], "affinity": round_half_up(affinity, 3),
-                "candidate_domains": sorted(cand_domains), "job_domains": sorted(job_domains),
+                "score": domain_score,
+                "max": WEIGHTS["domain"],
+                "affinity": round_half_up(affinity, 3),
+                "candidate_domains": sorted(cand_domains),
+                "job_domains": sorted(job_domains),
             },
             "qualifications": {
-                "score": qualification_score, "max": WEIGHTS["qualifications"],
-                "required_years": req_years, "candidate_years": cand_yrs,
-                "required_degree": req_degree, "candidate_degree": cand_degree, "degree_ok": degree_ok,
+                "score": qualification_score,
+                "max": WEIGHTS["qualifications"],
+                "required_years": req_years,
+                "candidate_years": cand_yrs,
+                "required_degree": req_degree,
+                "candidate_degree": cand_degree,
+                "degree_ok": degree_ok,
             },
             "skills": {
-                "score": skills_score, "max": WEIGHTS["skills"],
-                "matched": matched, "missing": missing,
+                "score": skills_score,
+                "max": WEIGHTS["skills"],
+                "matched": matched,
+                "missing": missing,
             },
             "logistics": {
-                "score": logistics_score, "max": WEIGHTS["logistics"],
-                "required_languages": langs_needed, "missing_languages": missing_langs,
+                "score": logistics_score,
+                "max": WEIGHTS["logistics"],
+                "required_languages": langs_needed,
+                "missing_languages": missing_langs,
                 "clearance_phrase": clearance,
             },
         },

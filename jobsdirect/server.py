@@ -7,7 +7,7 @@ import json
 import os
 import re
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from fastmcp import FastMCP
 
@@ -45,8 +45,8 @@ async def search_jobs(
     query: str,
     location: str = "Remote",
     portal: str = "all",
-    workplace: Optional[str] = None,
-    max_age_days: Optional[int] = 14,
+    workplace: str | None = None,
+    max_age_days: int | None = 14,
     limit: int = 10,
 ) -> str:
     """Search open job postings.
@@ -63,17 +63,25 @@ async def search_jobs(
     wanted = portals.ALL_PORTALS if portal.lower() == "all" else [portal.lower().replace(".", "_")]
     unknown = [p for p in wanted if p not in portals.ALL_PORTALS]
     if unknown:
-        return _json({"error": f"Unknown portal '{portal}'. Use one of: all, {', '.join(portals.ALL_PORTALS)}."})
+        return _json(
+            {
+                "error": f"Unknown portal '{portal}'. Use one of: all, {', '.join(portals.ALL_PORTALS)}."
+            }
+        )
 
     async with portals.http_client() as client:
         tasks = []
         for name in wanted:
             if name == "linkedin":
-                tasks.append(portals.search_linkedin(client, query, location, workplace, max_age_days, limit))
+                tasks.append(
+                    portals.search_linkedin(client, query, location, workplace, max_age_days, limit)
+                )
             elif name == "himalayas":
                 tasks.append(portals.search_himalayas(client, query, limit))
             else:
-                tasks.append(asyncio.to_thread(portals.search_site, name, query, max_age_days, limit))
+                tasks.append(
+                    asyncio.to_thread(portals.search_site, name, query, max_age_days, limit)
+                )
         batches = await asyncio.gather(*tasks)
 
     jobs = [job for batch in batches for job in batch if "error" not in job]
@@ -98,8 +106,8 @@ async def get_job_details(job_id_or_url: str) -> str:
 def evaluate_job_fit(
     candidate_profile: str,
     job_description: str,
-    candidate_languages: Optional[list[str]] = None,
-    work_authorized: Optional[bool] = None,
+    candidate_languages: list[str] | None = None,
+    work_authorized: bool | None = None,
 ) -> str:
     """Score candidate-to-job fit 0-100 with the 4-tier ATS engine.
 
@@ -112,24 +120,37 @@ def evaluate_job_fit(
         candidate_languages: e.g. ["English", "Turkish"]. Omit to detect from the profile.
         work_authorized: True if the candidate may work where the job is (no sponsorship needed).
     """
-    return _json(evaluate_fit(candidate_profile, job_description, candidate_languages, work_authorized))
+    return _json(
+        evaluate_fit(candidate_profile, job_description, candidate_languages, work_authorized)
+    )
 
 
-def tailor_resume_tool(candidate_cv: str, job_description: str, target_role: Optional[str] = None,
-                       target_company: Optional[str] = None) -> str:
+def tailor_resume_tool(
+    candidate_cv: str,
+    job_description: str,
+    target_role: str | None = None,
+    target_company: str | None = None,
+) -> str:
     """Re-rank the candidate's own CV bullets by relevance to the job, list matched/missing keywords,
     and flag bullets that need a metric. Returns Markdown (feed it to export_to_docx)."""
     return tailor_resume(candidate_cv, job_description, target_role, target_company)
 
 
-def generate_cover_letter(candidate_profile: str, job_description: str, company_name: str, job_title: str,
-                          candidate_name: Optional[str] = None, hiring_manager: Optional[str] = None) -> str:
+def generate_cover_letter(
+    candidate_profile: str,
+    job_description: str,
+    company_name: str,
+    job_title: str,
+    candidate_name: str | None = None,
+    hiring_manager: str | None = None,
+) -> str:
     """Draft a short cover letter that cites the candidate's two most relevant achievements."""
-    return cover_letter(candidate_profile, job_description, company_name, job_title, candidate_name,
-                        hiring_manager)
+    return cover_letter(
+        candidate_profile, job_description, company_name, job_title, candidate_name, hiring_manager
+    )
 
 
-def export_to_docx(title: str, content: str, filename: Optional[str] = None) -> str:
+def export_to_docx(title: str, content: str, filename: str | None = None) -> str:
     """Save Markdown text (resume, cover letter, report) as a Word .docx in the output folder."""
     try:
         path = export_docx(title, content, output_dir(), filename)
@@ -138,8 +159,9 @@ def export_to_docx(title: str, content: str, filename: Optional[str] = None) -> 
     return _json({"status": "ok", "file_path": str(path)})
 
 
-async def prepare_job_application(job_id_or_url: str, candidate_profile: str,
-                                  candidate_name: Optional[str] = None) -> str:
+async def prepare_job_application(
+    job_id_or_url: str, candidate_profile: str, candidate_name: str | None = None
+) -> str:
     """One call: fetch the posting, score fit, tailor the resume and draft the cover letter."""
     details = json.loads(await get_job_details(job_id_or_url))
     if "error" in details:
@@ -147,19 +169,34 @@ async def prepare_job_application(job_id_or_url: str, candidate_profile: str,
     title = details.get("title") or "the role"
     company = details.get("company") or "the company"
     description = details.get("description") or ""
-    return _json({
-        "job": {k: details.get(k) for k in ("title", "company", "url", "portal", "status")},
-        "evaluation": evaluate_fit(candidate_profile, description),
-        "tailored_resume": tailor_resume(candidate_profile, description, title, company),
-        "cover_letter": cover_letter(candidate_profile, description, company, title, candidate_name),
-        "next_steps": ["Review the gaps list", f"Apply at {details.get('url')}",
-                       "Call export_to_docx for Word copies", "Log it with track_application"],
-    })
+    return _json(
+        {
+            "job": {k: details.get(k) for k in ("title", "company", "url", "portal", "status")},
+            "evaluation": evaluate_fit(candidate_profile, description),
+            "tailored_resume": tailor_resume(candidate_profile, description, title, company),
+            "cover_letter": cover_letter(
+                candidate_profile, description, company, title, candidate_name
+            ),
+            "next_steps": [
+                "Review the gaps list",
+                f"Apply at {details.get('url')}",
+                "Call export_to_docx for Word copies",
+                "Log it with track_application",
+            ],
+        }
+    )
 
 
-def track_application(action: str = "list", job_id: str = "", company: str = "", role: str = "",
-                      portal: str = "", status: str = "applied", salary: str = "",
-                      notes: Optional[str] = None) -> str:
+def track_application(
+    action: str = "list",
+    job_id: str = "",
+    company: str = "",
+    role: str = "",
+    portal: str = "",
+    status: str = "applied",
+    salary: str = "",
+    notes: str | None = None,
+) -> str:
     """Manage the applications CSV (job_applications.csv in the output folder).
 
     Args:
@@ -172,8 +209,14 @@ def track_application(action: str = "list", job_id: str = "", company: str = "",
         if action == "list":
             return _json({"file": str(tracker.path), "applications": tracker.list()})
         if action == "add":
-            return _json({"added": tracker.add(job_id, company, role, portal, status, salary, notes or ""),
-                          "file": str(tracker.path)})
+            return _json(
+                {
+                    "added": tracker.add(
+                        job_id, company, role, portal, status, salary, notes or ""
+                    ),
+                    "file": str(tracker.path),
+                }
+            )
         if action == "update":
             return _json({"updated": tracker.update(job_id, company, role, status, notes)})
     except TrackerError as exc:
@@ -181,13 +224,21 @@ def track_application(action: str = "list", job_id: str = "", company: str = "",
     return _json({"error": "action must be add, update or list."})
 
 
-def lookup_salary_benchmark(role: str, location: Optional[str] = None) -> str:
+def lookup_salary_benchmark(role: str, location: str | None = None) -> str:
     """Indicative junior/mid/senior annual salary bands for a role in US, EU, UK, Türkiye or remote."""
     return _json(benchmark(role, location))
 
 
-for _fn in (search_jobs, get_job_details, evaluate_job_fit, generate_cover_letter, export_to_docx,
-            prepare_job_application, track_application, lookup_salary_benchmark):
+for _fn in (
+    search_jobs,
+    get_job_details,
+    evaluate_job_fit,
+    generate_cover_letter,
+    export_to_docx,
+    prepare_job_application,
+    track_application,
+    lookup_salary_benchmark,
+):
     mcp.tool(_fn)
 mcp.tool(tailor_resume_tool, name="tailor_resume")
 

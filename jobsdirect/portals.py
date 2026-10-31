@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import re
 from datetime import date, datetime, timezone
-from typing import Any, Optional
+from typing import Any
 
 import httpx
 from bs4 import BeautifulSoup
@@ -30,7 +30,7 @@ ALL_PORTALS = ["linkedin", "himalayas", *SITE_PORTALS]
 _WORKPLACE = {"onsite": "1", "remote": "2", "hybrid": "3"}
 
 
-def clean_text(value: Optional[str]) -> str:
+def clean_text(value: str | None) -> str:
     if not value:
         return ""
     value = re.sub(r"<[^>]+>", " ", value)
@@ -42,7 +42,7 @@ def parse_linkedin_cards(html: str, limit: int) -> list[dict[str, Any]]:
     soup = BeautifulSoup(html, "html.parser")
     jobs: list[dict[str, Any]] = []
     for card in soup.select("[data-entity-urn]"):
-        urn = card.get("data-entity-urn", "")
+        urn = str(card.get("data-entity-urn", ""))
         m = re.search(r"jobPosting:(\d+)", urn)
         if not m:
             continue
@@ -52,16 +52,18 @@ def parse_linkedin_cards(html: str, limit: int) -> list[dict[str, Any]]:
         location = card.select_one(".job-search-card__location")
         posted = card.select_one("time")
         link = card.select_one("a.base-card__full-link")
-        jobs.append({
-            "id": job_id,
-            "title": clean_text(title.get_text()) if title else f"LinkedIn job {job_id}",
-            "company": clean_text(company.get_text()) if company else "",
-            "location": clean_text(location.get_text()) if location else "",
-            "posted": posted.get("datetime", "") if posted else "",
-            "url": (link.get("href", "").split("?")[0] if link else "")
-                   or f"https://www.linkedin.com/jobs/view/{job_id}",
-            "portal": "linkedin",
-        })
+        jobs.append(
+            {
+                "id": job_id,
+                "title": clean_text(title.get_text()) if title else f"LinkedIn job {job_id}",
+                "company": clean_text(company.get_text()) if company else "",
+                "location": clean_text(location.get_text()) if location else "",
+                "posted": posted.get("datetime", "") if posted else "",
+                "url": (str(link.get("href", "")).split("?")[0] if link else "")
+                or f"https://www.linkedin.com/jobs/view/{job_id}",
+                "portal": "linkedin",
+            }
+        )
         if len(jobs) >= limit:
             break
     return jobs
@@ -71,8 +73,8 @@ async def search_linkedin(
     client: httpx.AsyncClient,
     query: str,
     location: str,
-    workplace: Optional[str],
-    max_age_days: Optional[int],
+    workplace: str | None,
+    max_age_days: int | None,
     limit: int,
 ) -> list[dict[str, Any]]:
     params = {"keywords": query, "location": location, "start": "0"}
@@ -91,7 +93,7 @@ async def search_linkedin(
         return [{"portal": "linkedin", "error": str(exc) or exc.__class__.__name__}]
 
 
-def parse_linkedin_detail(job_id: str, html: str, today: Optional[date] = None) -> dict[str, Any]:
+def parse_linkedin_detail(job_id: str, html: str, today: date | None = None) -> dict[str, Any]:
     soup = BeautifulSoup(html, "html.parser")
 
     def text_of(selector: str) -> str:
@@ -126,8 +128,13 @@ async def linkedin_detail(client: httpx.AsyncClient, job_id: str) -> dict[str, A
     except httpx.HTTPError as exc:
         return {"id": job_id, "portal": "linkedin", "error": str(exc) or exc.__class__.__name__}
     if resp.status_code in (404, 410):
-        return {"id": job_id, "portal": "linkedin", "status": "EXPIRED", "is_active": False,
-                "reason": f"LinkedIn returned HTTP {resp.status_code}."}
+        return {
+            "id": job_id,
+            "portal": "linkedin",
+            "status": "EXPIRED",
+            "is_active": False,
+            "reason": f"LinkedIn returned HTTP {resp.status_code}.",
+        }
     if resp.status_code != 200:
         return {"id": job_id, "portal": "linkedin", "error": f"HTTP {resp.status_code}"}
     return parse_linkedin_detail(job_id, resp.text)
@@ -138,7 +145,9 @@ def filter_himalayas(payload: dict[str, Any], query: str, limit: int) -> list[di
     jobs: list[dict[str, Any]] = []
     for job in payload.get("jobs", []):
         title = job.get("title") or ""
-        haystack = " ".join([title, " ".join(job.get("categories") or []), job.get("excerpt") or ""]).lower()
+        haystack = " ".join(
+            [title, " ".join(job.get("categories") or []), job.get("excerpt") or ""]
+        ).lower()
         if words and not any(w in haystack for w in words):
             continue
         salary = ""
@@ -148,22 +157,26 @@ def filter_himalayas(payload: dict[str, Any], query: str, limit: int) -> list[di
         posted = ""
         if isinstance(job.get("pubDate"), (int, float)):
             posted = datetime.fromtimestamp(job["pubDate"], tz=timezone.utc).date().isoformat()
-        jobs.append({
-            "id": job.get("guid") or "",
-            "title": title,
-            "company": job.get("companyName") or "",
-            "location": "Remote" + (f" ({', '.join(restrictions)})" if restrictions else ""),
-            "salary": salary,
-            "posted": posted,
-            "url": job.get("applicationLink") or job.get("guid") or "",
-            "portal": "himalayas",
-        })
+        jobs.append(
+            {
+                "id": job.get("guid") or "",
+                "title": title,
+                "company": job.get("companyName") or "",
+                "location": "Remote" + (f" ({', '.join(restrictions)})" if restrictions else ""),
+                "salary": salary,
+                "posted": posted,
+                "url": job.get("applicationLink") or job.get("guid") or "",
+                "portal": "himalayas",
+            }
+        )
         if len(jobs) >= limit:
             break
     return jobs
 
 
-async def search_himalayas(client: httpx.AsyncClient, query: str, limit: int) -> list[dict[str, Any]]:
+async def search_himalayas(
+    client: httpx.AsyncClient, query: str, limit: int
+) -> list[dict[str, Any]]:
     try:
         resp = await client.get("https://himalayas.app/jobs/api/search", params={"q": query})
         if resp.status_code != 200:
@@ -173,7 +186,7 @@ async def search_himalayas(client: httpx.AsyncClient, query: str, limit: int) ->
         return [{"portal": "himalayas", "error": str(exc) or exc.__class__.__name__}]
 
 
-def _ddg_timelimit(max_age_days: Optional[int]) -> Optional[str]:
+def _ddg_timelimit(max_age_days: int | None) -> str | None:
     if max_age_days is None:
         return None
     if max_age_days <= 1:
@@ -185,7 +198,9 @@ def _ddg_timelimit(max_age_days: Optional[int]) -> Optional[str]:
     return None
 
 
-def search_site(portal: str, query: str, max_age_days: Optional[int], limit: int) -> list[dict[str, Any]]:
+def search_site(
+    portal: str, query: str, max_age_days: int | None, limit: int
+) -> list[dict[str, Any]]:
     """Finds fresh postings on a portal without an API via a site-restricted DuckDuckGo search."""
     from ddgs import DDGS  # imported lazily: slow import, only needed for these portals
 
@@ -206,15 +221,18 @@ def search_site(portal: str, query: str, max_age_days: Optional[int], limit: int
         if not listing_status(f"{title} {snippet}").is_active:
             continue
         seen.add(url)
-        jobs.append({
-            "id": url,
-            "title": re.sub(rf"\s*[-|]\s*[^-|]*{re.escape(site)}.*$", "", title, flags=re.I) or title,
-            "company": "",
-            "location": "Türkiye" if portal == "kariyer" else "See posting",
-            "snippet": snippet,
-            "url": url,
-            "portal": portal,
-        })
+        jobs.append(
+            {
+                "id": url,
+                "title": re.sub(rf"\s*[-|]\s*[^-|]*{re.escape(site)}.*$", "", title, flags=re.I)
+                or title,
+                "company": "",
+                "location": "Türkiye" if portal == "kariyer" else "See posting",
+                "snippet": snippet,
+                "url": url,
+                "portal": portal,
+            }
+        )
         if len(jobs) >= limit:
             break
     return jobs
@@ -227,8 +245,12 @@ async def fetch_page(client: httpx.AsyncClient, url: str) -> dict[str, Any]:
     except httpx.HTTPError as exc:
         return {"url": url, "error": str(exc) or exc.__class__.__name__}
     if resp.status_code in (404, 410):
-        return {"url": url, "status": "EXPIRED", "is_active": False,
-                "reason": f"The page returned HTTP {resp.status_code}."}
+        return {
+            "url": url,
+            "status": "EXPIRED",
+            "is_active": False,
+            "reason": f"The page returned HTTP {resp.status_code}.",
+        }
     if resp.status_code != 200:
         return {"url": url, "error": f"HTTP {resp.status_code}"}
     soup = BeautifulSoup(resp.text, "html.parser")
@@ -237,12 +259,19 @@ async def fetch_page(client: httpx.AsyncClient, url: str) -> dict[str, Any]:
     text = soup.get_text("\n", strip=True)
     title = clean_text(soup.title.get_text()) if soup.title else ""
     portal = next((key for key, site in SITE_PORTALS.items() if site in url), "web")
-    return {"url": url, "title": title, "company": "", "description": text[:8000], "portal": portal,
-            **listing_status(f"{title}\n{text}").to_dict()}
+    return {
+        "url": url,
+        "title": title,
+        "company": "",
+        "description": text[:8000],
+        "portal": portal,
+        **listing_status(f"{title}\n{text}").to_dict(),
+    }
 
 
 def http_client() -> httpx.AsyncClient:
     return httpx.AsyncClient(
-        timeout=TIMEOUT, follow_redirects=True,
+        timeout=TIMEOUT,
+        follow_redirects=True,
         headers={"User-Agent": USER_AGENT, "Accept-Language": "en-US,en;q=0.9"},
     )

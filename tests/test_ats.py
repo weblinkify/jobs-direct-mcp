@@ -1,8 +1,15 @@
 from datetime import date
 
 from jobsdirect.ats import (
-    candidate_years, degree_level, domain_affinity, evaluate_fit, extract_domains, has_term,
-    listing_status, required_languages, required_years,
+    candidate_years,
+    degree_level,
+    domain_affinity,
+    evaluate_fit,
+    extract_domains,
+    has_term,
+    listing_status,
+    required_languages,
+    required_years,
 )
 
 TODAY = date(2026, 10, 26)
@@ -73,9 +80,15 @@ def test_evaluate_fit_bounds_and_shape():
 def test_explicit_languages_override_detection():
     job = "Fluent Finnish required."
     assert evaluate_fit("I speak Finnish", job, today=TODAY)["verdict"] != "LANGUAGE_GATE_FAILED"
-    assert evaluate_fit("I speak Finnish", job, ["English"], today=TODAY)["verdict"] == "LANGUAGE_GATE_FAILED"
+    assert (
+        evaluate_fit("I speak Finnish", job, ["English"], today=TODAY)["verdict"]
+        == "LANGUAGE_GATE_FAILED"
+    )
 
 
 def test_work_authorization_false_is_not_eligible():
     job = "Security clearance required. Python."
-    assert evaluate_fit("Python dev", job, work_authorized=False, today=TODAY)["verdict"] == "NOT_ELIGIBLE"
+    assert (
+        evaluate_fit("Python dev", job, work_authorized=False, today=TODAY)["verdict"]
+        == "NOT_ELIGIBLE"
+    )

@@ -22,10 +22,14 @@ def main() -> None:
     today = date.fromisoformat(spec["today"])
     out = []
     for case in spec["cases"]:
-        result = evaluate_fit(case["candidate"], case["job"], case["languages"], case["work_authorized"], today)
+        result = evaluate_fit(
+            case["candidate"], case["job"], case["languages"], case["work_authorized"], today
+        )
         out.append({**case, "expected": result})
     (ROOT / "fixtures" / "ats_cases.json").write_text(
-        json.dumps({"today": spec["today"], "cases": out}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        json.dumps({"today": spec["today"], "cases": out}, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
     print(f"wrote {len(out)} cases")
 
 
